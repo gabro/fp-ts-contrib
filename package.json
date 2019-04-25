@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/gcanti/fp-ts-contrib",
   "peerDependencies": {
-    "fp-ts": "^1.15.1"
+    "fp-ts": "^1.17.1"
   },
   "devDependencies": {
     "@types/benchmark": "^1.0.31",
