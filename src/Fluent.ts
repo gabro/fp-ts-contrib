@@ -5,7 +5,7 @@ import { Separated, Compactable, Compactable1, Compactable2, Compactable2C } fro
 import { Either } from 'fp-ts/lib/Either'
 import { Filterable, Filterable1, Filterable2, Filterable2C } from 'fp-ts/lib/Filterable'
 import { Foldable2v, Foldable2v1, Foldable2v2, Foldable2v2C } from 'fp-ts/lib/Foldable2v'
-import { Predicate, identity } from 'fp-ts/lib/function'
+import { Predicate, identity, Refinement } from 'fp-ts/lib/function'
 import { Functor, Functor1, Functor2, Functor2C } from 'fp-ts/lib/Functor'
 import { HKT, Type, Type2, URIS, URIS2, HKT2 } from 'fp-ts/lib/HKT'
 import { Monoid } from 'fp-ts/lib/Monoid'
@@ -77,9 +77,17 @@ interface Fluent2C<F extends URIS2, I, L, A> {
   alt(this: Fluent2C<F, Alt2C<F, L>, L, A>, that: Type2<F, L, A>): Fluent2C<F, I, L, A>
   compact<A>(this: Fluent2<F, Compactable2C<F, L>, L, Option<A>>): Fluent2C<F, I, L, A>
   separate<A, B>(this: Fluent2C<F, Compactable2C<F, L>, L, Either<A, B>>): Separated<Type2<F, L, A>, Type2<F, L, B>>
-  filter(this: Fluent2C<F, Filterable2C<F, L>, L, A>, p: Predicate<A>): Fluent2C<F, I, L, A>
+  filter<B extends A>(this: Fluent2C<F, Filterable2C<F, L>, L, A>, refinement: Refinement<A, B>): Fluent2C<F, I, L, B>
+  filter(this: Fluent2C<F, Filterable2C<F, L>, L, A>, predicate: Predicate<A>): Fluent2C<F, I, L, A>
   filterMap<B>(this: Fluent2C<F, Filterable2C<F, L>, L, A>, f: (a: A) => Option<B>): Fluent2C<F, I, L, B>
-  partition(this: Fluent2C<F, Filterable2C<F, L>, L, A>, p: Predicate<A>): Separated<Type2<F, L, A>, Type2<F, L, A>>
+  partition<B extends A>(
+    this: Fluent2C<F, Filterable2C<F, L>, L, A>,
+    refinement: Refinement<A, B>
+  ): Separated<Type2<F, L, A>, Type2<F, L, B>>
+  partition(
+    this: Fluent2C<F, Filterable2C<F, L>, L, A>,
+    predicate: Predicate<A>
+  ): Separated<Type2<F, L, A>, Type2<F, L, A>>
   partitionMap<RL, RR>(
     this: Fluent2<F, Filterable2C<F, L>, L, A>,
     f: (a: A) => Either<RL, RR>
@@ -130,9 +138,14 @@ interface Fluent2<F extends URIS2, I, L, A> {
   alt(this: Fluent2<F, Alt2<F>, L, A>, that: Type2<F, L, A>): Fluent2<F, I, L, A>
   compact<A>(this: Fluent2<F, Compactable2<F>, L, Option<A>>): Fluent2<F, I, L, A>
   separate<A, B>(this: Fluent2<F, Compactable2<F>, L, Either<A, B>>): Separated<Type2<F, L, A>, Type2<F, L, B>>
-  filter(this: Fluent2<F, Filterable2<F>, L, A>, p: Predicate<A>): Fluent2<F, I, L, A>
+  filter<B extends A>(this: Fluent2<F, Filterable2<F>, L, A>, refinement: Refinement<A, B>): Fluent2<F, I, L, B>
+  filter(this: Fluent2<F, Filterable2<F>, L, A>, predicate: Predicate<A>): Fluent2<F, I, L, A>
   filterMap<B>(this: Fluent2<F, Filterable2<F>, L, A>, f: (a: A) => Option<B>): Fluent2<F, I, L, B>
-  partition(this: Fluent2<F, Filterable2<F>, L, A>, p: Predicate<A>): Separated<Type2<F, L, A>, Type2<F, L, A>>
+  partition<B extends A>(
+    this: Fluent2<F, Filterable2<F>, L, A>,
+    refinement: Refinement<A, B>
+  ): Separated<Type2<F, L, A>, Type2<F, L, B>>
+  partition(this: Fluent2<F, Filterable2<F>, L, A>, predicate: Predicate<A>): Separated<Type2<F, L, A>, Type2<F, L, A>>
   partitionMap<RL, RR>(
     this: Fluent2<F, Filterable2<F>, L, A>,
     f: (a: A) => Either<RL, RR>
@@ -181,9 +194,14 @@ interface Fluent1<F extends URIS, I, A> {
   alt(this: Fluent1<F, Alt1<F>, A>, that: Type<F, A>): Fluent1<F, I, A>
   compact<A>(this: Fluent1<F, Compactable1<F>, Option<A>>): Fluent1<F, I, A>
   separate<A, B>(this: Fluent1<F, Compactable1<F>, Either<A, B>>): Separated<Type<F, A>, Type<F, B>>
-  filter(this: Fluent1<F, Filterable1<F>, A>, p: Predicate<A>): Fluent1<F, I, A>
+  filter<B extends A>(this: Fluent1<F, Filterable1<F>, A>, refinement: Refinement<A, B>): Fluent1<F, I, B>
+  filter(this: Fluent1<F, Filterable1<F>, A>, predicate: Predicate<A>): Fluent1<F, I, A>
   filterMap<B>(this: Fluent1<F, Filterable1<F>, A>, f: (a: A) => Option<B>): Fluent1<F, I, B>
-  partition(this: Fluent1<F, Filterable1<F>, A>, p: Predicate<A>): Separated<Type<F, A>, Type<F, A>>
+  partition<B extends A>(
+    this: Fluent1<F, Filterable1<F>, A>,
+    refinement: Refinement<A, B>
+  ): Separated<Type<F, A>, Type<F, B>>
+  partition(this: Fluent1<F, Filterable1<F>, A>, predicate: Predicate<A>): Separated<Type<F, A>, Type<F, A>>
   partitionMap<RL, RR>(
     this: Fluent1<F, Filterable1<F>, A>,
     f: (a: A) => Either<RL, RR>
@@ -287,14 +305,17 @@ class FluentHKT<F, I, A> {
   separate<I extends Compactable<F>, A, B>(this: FluentHKT<F, I, Either<A, B>>): Separated<HKT<F, A>, HKT<F, B>> {
     return this.I.separate(this.value)
   }
-  filter<I extends Filterable<F>>(this: FluentHKT<F, I, A>, p: Predicate<A>): FluentHKT<F, I, A> {
-    return new FluentHKT<F, I, A>(this.I, this.I.filter(this.value, p))
+  filter<I extends Filterable<F>>(this: FluentHKT<F, I, A>, predicate: Predicate<A>): FluentHKT<F, I, A> {
+    return new FluentHKT<F, I, A>(this.I, this.I.filter(this.value, predicate))
   }
   filterMap<I extends Filterable<F>, B>(this: FluentHKT<F, I, A>, f: (a: A) => Option<B>): FluentHKT<F, I, B> {
     return new FluentHKT<F, I, B>(this.I, this.I.filterMap(this.value, f))
   }
-  partition<I extends Filterable<F>>(this: FluentHKT<F, I, A>, p: Predicate<A>): Separated<HKT<F, A>, HKT<F, A>> {
-    return this.I.partition(this.value, p)
+  partition<I extends Filterable<F>>(
+    this: FluentHKT<F, I, A>,
+    predicate: Predicate<A>
+  ): Separated<HKT<F, A>, HKT<F, A>> {
+    return this.I.partition(this.value, predicate)
   }
   partitionMap<I extends Filterable<F>, RL, RR>(
     this: FluentHKT<F, I, A>,

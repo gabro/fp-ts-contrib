@@ -7,6 +7,8 @@ import * as Th from 'fp-ts/lib/These'
 import { either, right } from 'fp-ts/lib/Either'
 import { Do } from '../../src/Do'
 import * as alignRecord from '../../src/Align/Record'
+import * as F from '../../src/Fluent'
+import { option, some, Option } from 'fp-ts/lib/Option'
 
 //
 // time
@@ -34,3 +36,12 @@ alignRecord.align(r1, r2) // $ExpectType Record<"a" | "b", These<number, string>
 
 alignRecord.alignWith(d1, d2, (x: Th.These<number, string>) => 'Test') // $ExpectType Record<string, string>
 alignRecord.alignWith(r1, r2, (x: Th.These<number, string>) => 'Test') // $ExpectType Record<"a" | "b", string>
+
+//
+// Fluent
+//
+
+const fluent = F.fluent(option)
+declare function isString(u: unknown): u is string
+fluent(some(1) as Option<string | number>).filter(isString).value // $ExpectType Option<string>
+fluent(some(1) as Option<string | number>).partition(isString) // $ExpectType Separated<Option<string | number>, Option<string>>
